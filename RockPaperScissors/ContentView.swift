@@ -18,6 +18,7 @@ struct ContentView: View {
     @State private var cpuScore = 0
     
     // Alerts
+    @State private var showingFinalAlert = false
     @State private var showingFightResult = false
     @State private var fightAlertMessage = ""
     
@@ -26,8 +27,12 @@ struct ContentView: View {
             RadialGradient(gradient: Gradient(colors: [Color(red: 29/255, green: 52/255, blue: 84/255), Color(red: 23/255, green: 31/255, blue: 64/255)]), center: .center, startRadius: 0, endRadius: 500)
                 .edgesIgnoringSafeArea(.all)
                 .alert(isPresented: $showingFightResult) {
-                    Alert(title: Text("Fight!"), message: Text(fightAlertMessage))
-            }
+                    if playerScore == 5 || cpuScore == 5 {
+                        return Alert(title: playerScore > cpuScore ? Text("Success!") : Text("Defeat!"), message: Text("\(fightAlertMessage)\n\nPlayer: \(playerScore), CPU: \(cpuScore)"), dismissButton: Alert.Button.default(Text("Restart"), action: {self.playerScore = 0;self.cpuScore=0}))
+                    } else {
+                        return Alert(title: Text("Fight!"), message: Text(fightAlertMessage))
+                    }
+                }
             VStack(spacing: 20) {
                 Text("ROCK\nPAPER\nSCISSORS")
                     .font(.title)
@@ -95,12 +100,6 @@ struct Weapon: View {
             fightAlertMessage = "Unfortunetaly, your opponent chose \(cpuPick!). You loose this round!"
         }
         showingFightResult = true
-        
-        if playerScore == 5 {
-            // Player wins
-        } else if cpuScore == 5 {
-            // CPU wins
-        }
     }
 }
 
