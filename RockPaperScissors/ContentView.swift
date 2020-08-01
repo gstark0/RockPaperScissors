@@ -17,10 +17,17 @@ struct ContentView: View {
     @State private var playerScore = 0
     @State private var cpuScore = 0
     
+    // Alerts
+    @State private var showingFightResult = false
+    @State private var fightAlertMessage = ""
+    
     var body: some View {
         ZStack {
             RadialGradient(gradient: Gradient(colors: [Color(red: 29/255, green: 52/255, blue: 84/255), Color(red: 23/255, green: 31/255, blue: 64/255)]), center: .center, startRadius: 0, endRadius: 500)
                 .edgesIgnoringSafeArea(.all)
+                .alert(isPresented: $showingFightResult) {
+                    Alert(title: Text("Fight!"), message: Text(fightAlertMessage))
+            }
             VStack(spacing: 20) {
                 Text("ROCK\nPAPER\nSCISSORS")
                     .font(.title)
@@ -30,11 +37,12 @@ struct ContentView: View {
                 Text("Pick your weapon")
                     .foregroundColor(.white)
                 VStack {
-                    Weapon(playerPick: "rock", weapons: weapons, playerScore: $playerScore, cpuScore: $cpuScore)
-                    Weapon(playerPick: "paper", weapons: weapons, playerScore: $playerScore, cpuScore: $cpuScore)
-                    Weapon(playerPick: "scissors", weapons: weapons, playerScore: $playerScore, cpuScore: $cpuScore)
+                    Weapon(playerPick: "rock", weapons: weapons, playerScore: $playerScore, cpuScore: $cpuScore, showingFightResult: $showingFightResult, fightAlertMessage: $fightAlertMessage)
+                    Weapon(playerPick: "paper", weapons: weapons, playerScore: $playerScore, cpuScore: $cpuScore, showingFightResult: $showingFightResult, fightAlertMessage: $fightAlertMessage)
+                    Weapon(playerPick: "scissors", weapons: weapons, playerScore: $playerScore, cpuScore: $cpuScore, showingFightResult: $showingFightResult, fightAlertMessage: $fightAlertMessage)
                 }
-            }.offset(y: -30)
+            }
+            .offset(y: -30)
             
             VStack {
                 Spacer()
@@ -59,6 +67,10 @@ struct Weapon: View {
     @Binding var playerScore: Int
     @Binding var cpuScore: Int
     
+    // Alerts
+    @Binding var showingFightResult: Bool
+    @Binding var fightAlertMessage: String
+    
     var body: some View {
         Button(action: fight) {
             Image(playerPick)
@@ -73,13 +85,16 @@ struct Weapon: View {
         let cpuPick = weapons.randomElement()
         
         // If player wins fight ..., else if draw ..., else
-        if ((playerPick == "rock") && (cpuPick == "scissors")) || ((playerPick == "paper") && (cpuPick == "rock")) || ((playerPick == "scissors") && (cpuPick == "paper")) {
+        if ((playerPick == "rock") && (cpuPick! == "scissors")) || ((playerPick == "paper") && (cpuPick! == "rock")) || ((playerPick == "scissors") && (cpuPick! == "paper")) {
             playerScore += 1
-        } else if playerPick == cpuPick {
-            // Draw
+            fightAlertMessage = "Your opponent chose \(cpuPick!). You win this round!"
+        } else if playerPick == cpuPick! {
+            fightAlertMessage = "Your opponent also chose \(cpuPick!). It's a draw!"
         } else {
             cpuScore += 1
+            fightAlertMessage = "Unfortunetaly, your opponent chose \(cpuPick!). You loose this round!"
         }
+        showingFightResult = true
         
         if playerScore == 5 {
             // Player wins
