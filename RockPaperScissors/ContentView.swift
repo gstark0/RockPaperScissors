@@ -24,6 +24,21 @@ struct Weapon: View {
     }
 }
 
+struct Score: View {
+    var name: String
+    var score: Int
+    var rightSide = false
+    
+    var body: some View {
+        VStack(alignment: rightSide ? .trailing : .leading) {
+            Text(name)
+            Text(String(score))
+                .font(.system(size: 40))
+        }
+        .foregroundColor(.white)
+    }
+}
+
 struct ContentView: View {
     
     let weapons = ["rock", "paper", "scissors"]
@@ -44,6 +59,19 @@ struct ContentView: View {
                     Weapon(imgPath: "rock")
                     Weapon(imgPath: "paper")
                     Weapon(imgPath: "scissors")
+                }
+            }.offset(y: -30)
+            
+            VStack {
+                Spacer()
+                HStack {
+                    Score(name: "Player", score: 5)
+                        .padding()
+                        .padding()
+                    Spacer()
+                    Score(name: "CPU", score: 4, rightSide: true)
+                        .padding()
+                        .padding()
                 }
             }
         }
