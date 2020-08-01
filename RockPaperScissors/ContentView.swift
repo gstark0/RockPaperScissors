@@ -8,7 +8,26 @@
 
 import SwiftUI
 
+struct Weapon: View {
+    var imgPath: String
+    
+    var body: some View {
+        Button(action: {
+            
+        }) {
+            Image(imgPath)
+                .renderingMode(.original)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 110)
+        }
+    }
+}
+
 struct ContentView: View {
+    
+    let weapons = ["rock", "paper", "scissors"]
+    
     var body: some View {
         ZStack {
             RadialGradient(gradient: Gradient(colors: [Color(red: 29/255, green: 52/255, blue: 84/255), Color(red: 23/255, green: 31/255, blue: 64/255)]), center: .center, startRadius: 0, endRadius: 500)
@@ -21,6 +40,11 @@ struct ContentView: View {
                     .multilineTextAlignment(.center)
                 Text("Pick your weapon")
                     .foregroundColor(.white)
+                VStack {
+                    Weapon(imgPath: "rock")
+                    Weapon(imgPath: "paper")
+                    Weapon(imgPath: "scissors")
+                }
             }
         }
     }
