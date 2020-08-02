@@ -97,7 +97,7 @@ struct Weapon: View {
             fightAlertMessage = "Your opponent also chose \(cpuPick!). It's a draw!"
         } else {
             cpuScore += 1
-            fightAlertMessage = "Unfortunetaly, your opponent chose \(cpuPick!). You loose this round!"
+            fightAlertMessage = "Unfortunetaly, your opponent chose \(cpuPick!). You lose this round!"
         }
         showingFightResult = true
     }
